@@ -38,13 +38,22 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/vocabulary", vocabularyRoutes);
 app.use("/api/ai", aiRoutes);
 
+const frontendPath = path.join(__dirname, "../frontend/dist");
+
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.use(express.static(frontendPath));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    res.sendFile(path.join(frontendPath, "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running successfully. (Set NODE_ENV=production to serve frontend)");
   });
 }
+
+console.log("Environment:", process.env.NODE_ENV);
+console.log("Serving Frontend from:", frontendPath);
 
 const PORT = process.env.PORT;
 server.listen(PORT, (req, res) => {
