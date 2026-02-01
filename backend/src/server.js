@@ -36,24 +36,29 @@ app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/vocabulary", vocabularyRoutes);
-app.use("/api/ai", aiRoutes);
-
 const frontendPath = path.join(__dirname, "../frontend/dist");
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(frontendPath));
+// Fallback: Check if build exists, OR if env is production
+// This makes it work even if you forget to set NODE_ENV!
+import fs from "fs";
+const startFrontend = () => {
+  if (fs.existsSync(path.join(frontendPath, "index.html"))) {
+    console.log("Serving Frontend (Build Found)");
+    app.use(express.static(frontendPath));
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(frontendPath, "index.html"));
+    });
+  } else {
+    // Development or Build Missing
+    console.log("Frontend build not found or dev mode.");
+    app.get("/", (req, res) => {
+      // Debug info for the user
+      res.send(`API is running. NODE_ENV = ${process.env.NODE_ENV}. (Build path: ${frontendPath} - Found: false)`);
+    });
+  }
+};
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(frontendPath, "index.html"));
-  });
-} else {
-  app.get("/", (req, res) => {
-    res.send("API is running successfully. (Set NODE_ENV=production to serve frontend)");
-  });
-}
-
-console.log("Environment:", process.env.NODE_ENV);
-console.log("Serving Frontend from:", frontendPath);
+startFrontend();
 
 const PORT = process.env.PORT;
 server.listen(PORT, (req, res) => {
