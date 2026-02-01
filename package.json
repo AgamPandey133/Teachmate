@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Root script for deployment",
     "scripts": {
-        "build": "cd backend && npm install && npm run build",
+        "build": "cd backend && npm install && npm run build --legacy-peer-deps",
         "start": "cd backend && npm start"
     },
     "engines": {

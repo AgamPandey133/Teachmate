@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@maximeheckel/design-system": "^2.0.0",
     "@tanstack/react-query": "^5.85.5",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.21",
