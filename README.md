@@ -2,7 +2,7 @@
 
 **TeachMate** is a comprehensive **Language Learning Platform** that connects students with mentors and leverages advanced AI to accelerate language acquisition. It features real-time communication, WebRTC video calls, an AI-powered tutor using a custom **Retrieval-Augmented Generation (RAG)** pipeline, and tools designed specifically for language exchange.
 
-![TeachMate Banner](https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=1200&auto=format&fit=crop)
+![TeachMate Banner](./banner.png)
 
 ## 🚀 Key Features
 
