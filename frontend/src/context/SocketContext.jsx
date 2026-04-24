@@ -20,7 +20,7 @@ export const SocketContextProvider = ({ children }) => {
       //     userId: authUser._id,
       //   },
       // });
-      const socket = io(import.meta.env.MODE === "development" ? "/" : "https://agam-teachmate.duckdns.org", {
+      const socket = io(import.meta.env.MODE === "development" ? "/" : "https://teachmatebackend.duckdns.org", {
     query: { userId: authUser._id }
 });
 
