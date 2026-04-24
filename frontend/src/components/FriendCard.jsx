@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { LANGUAGE_TO_FLAG } from "../constants";
-import { getAvatar } from "../lib/utils";
+import AvatarImage from "./AvatarImage";
 
 const FriendCard = ({ friend }) => {
   return (
@@ -10,7 +10,7 @@ const FriendCard = ({ friend }) => {
         <div className="flex items-center gap-4 mb-4">
           <div className="avatar">
             <div className="w-16 rounded-full border border-base-300">
-              <img src={getAvatar(friend.profilePic, friend.fullName)} alt={friend.fullName} />
+              <AvatarImage profilePic={friend.profilePic} fullName={friend.fullName} />
             </div>
           </div>
           <div>

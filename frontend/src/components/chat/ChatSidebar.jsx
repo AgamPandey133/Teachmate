@@ -4,7 +4,7 @@ import { useChatStore } from "../../store/useChatStore";
 // I need useSocketContext for onlineUsers.
 import { useSocketContext } from "../../context/SocketContext";
 import { Users } from "lucide-react";
-import { getAvatar } from "../../lib/utils";
+import AvatarImage from "../AvatarImage";
 
 export const ChatSidebar = () => {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } =
@@ -64,11 +64,7 @@ export const ChatSidebar = () => {
             `}
           >
             <div className="relative mx-auto lg:mx-0">
-              <img
-                src={getAvatar(user.profilePic, user.fullName)}
-                alt={user.fullName}
-                className="size-12 object-cover rounded-full"
-              />
+              <AvatarImage profilePic={user.profilePic} fullName={user.fullName} />
               {onlineUsers.includes(user._id) && (
                 <span
                   className="absolute bottom-0 right-0 size-3 bg-green-500 

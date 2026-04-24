@@ -5,7 +5,7 @@ import { useChatStore } from "../store/useChatStore";
 import useAuthUser from "../hooks/useAuthUser";
 import { User, Mail, Globe, MapPin, DollarSign, Save, Camera } from "lucide-react";
 import toast from "react-hot-toast";
-import { getAvatar } from "../lib/utils";
+import AvatarImage from "../components/AvatarImage";
 
 const ProfilePage = () => {
     const { authUser } = useAuthUser();
@@ -90,7 +90,11 @@ const ProfilePage = () => {
                     <div className="relative mb-4">
                         <div className="avatar">
                             <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                <img src={formData.profilePicPreview || getAvatar(authUser.profilePic, authUser.fullName)} alt="Profile" />
+                                {formData.profilePicPreview ? (
+                                    <img src={formData.profilePicPreview} alt="Profile" className="w-full h-full object-cover rounded-full" />
+                                ) : (
+                                    <AvatarImage profilePic={authUser.profilePic} fullName={authUser.fullName} />
+                                )}
                             </div>
                         </div>
                         <label 

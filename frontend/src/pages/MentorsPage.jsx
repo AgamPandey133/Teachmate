@@ -3,7 +3,7 @@ import { getMentors, sendFriendRequest } from "../lib/api";
 import { UserPlus, MessageSquare, Star } from "lucide-react";
 import useAuthUser from "../hooks/useAuthUser";
 import { useNavigate } from "react-router";
-import { getAvatar } from "../lib/utils";
+import AvatarImage from "../components/AvatarImage";
 
 const MentorsPage = () => {
     const { authUser } = useAuthUser();
@@ -53,7 +53,7 @@ const MentorsPage = () => {
                         <figure className="px-10 pt-10">
                             <div className="avatar">
                                 <div className="w-24 rounded-full ring ring-base-300 ring-offset-base-100 ring-offset-2 group-hover:ring-primary/50 transition-all duration-300 shadow-lg">
-                                    <img src={getAvatar(mentor.profilePic, mentor.fullName)} alt={mentor.fullName} />
+                                    <AvatarImage profilePic={mentor.profilePic} fullName={mentor.fullName} />
                                 </div>
                             </div>
                         </figure>

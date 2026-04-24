@@ -10,6 +10,7 @@ import {
   ShipWheelIcon,
   ShuffleIcon,
 } from "lucide-react";
+import AvatarImage from "../components/AvatarImage";
 import { LANGUAGES } from "../constants";
 
 const OnboardingPage = () => {
@@ -97,12 +98,14 @@ const OnboardingPage = () => {
               {/* IMAGE PREVIEW */}
               <div className="relative">
                   <div className="size-32 rounded-full bg-base-300 overflow-hidden border-2 border-base-200">
-                    {(formState.profilePicPreview || formState.profilePic) ? (
+                    {formState.profilePicPreview ? (
                       <img
-                        src={formState.profilePicPreview || formState.profilePic}
+                        src={formState.profilePicPreview}
                         alt="Profile Preview"
                         className="w-full h-full object-cover"
                       />
+                    ) : formState.profilePic ? (
+                      <AvatarImage profilePic={formState.profilePic} fullName={authUser?.fullName} />
                     ) : (
                       <div className="flex items-center justify-center h-full">
                         <CameraIcon className="size-12 text-base-content opacity-40" />
