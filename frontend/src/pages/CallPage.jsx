@@ -85,6 +85,12 @@ const CallPage = () => {
       initiator: true,
       trickle: false,
       stream: currentStream,
+      config: {
+        iceServers: [
+          { urls: "stun:stun.l.google.com:19302" },
+          { urls: "stun:global.stun.twilio.com:3478" },
+        ],
+      },
     });
 
     peer.on("signal", (data) => {
@@ -106,7 +112,7 @@ const CallPage = () => {
     
     peer.on("error", (err) => {
         console.error("Peer Error (Initiator):", err);
-        toast.error("Call connection failed");
+        toast.error("Connection failed: " + err.message);
     });
 
     peer.on("connect", () => console.log("Peer Connected (Initiator)"));
@@ -127,6 +133,12 @@ const CallPage = () => {
       initiator: false,
       trickle: false,
       stream: currentStream,
+      config: {
+        iceServers: [
+          { urls: "stun:stun.l.google.com:19302" },
+          { urls: "stun:global.stun.twilio.com:3478" },
+        ],
+      },
     });
 
     peer.on("signal", (data) => {
@@ -143,7 +155,7 @@ const CallPage = () => {
 
     peer.on("error", (err) => {
         console.error("Peer Error (Receiver):", err);
-        toast.error("Call connection failed");
+        toast.error("Connection failed: " + err.message);
     });
     
     peer.on("connect", () => console.log("Peer Connected (Receiver)"));
