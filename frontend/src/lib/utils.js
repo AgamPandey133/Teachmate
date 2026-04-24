@@ -7,3 +7,9 @@ export function formatMessageTime(date) {
     hour12: false,
   });
 }
+
+export function getAvatar(profilePic, fullName) {
+  if (profilePic) return profilePic;
+  const name = fullName || "User";
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=200`;
+}

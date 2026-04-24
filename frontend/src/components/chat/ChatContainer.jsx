@@ -5,7 +5,7 @@ import MessageInput from "./MessageInput";
 import MessageSkeleton from "./MessageSkeleton";
 import useAuthUser from "../../hooks/useAuthUser";
 import { useSocketContext } from "../../context/SocketContext";
-import { formatMessageTime } from "../../lib/utils";
+import { formatMessageTime, getAvatar } from "../../lib/utils";
 import { BookMarked } from "lucide-react";
 import toast from "react-hot-toast";
 import { addWordToNotebook } from "../../lib/api";
@@ -89,8 +89,8 @@ const ChatContainer = () => {
                 <img
                   src={
                     message.senderId === authUser._id
-                      ? authUser.profilePic || "/avatar.png"
-                      : selectedUser.profilePic || "/avatar.png"
+                      ? getAvatar(authUser.profilePic, authUser.fullName)
+                      : getAvatar(selectedUser.profilePic, selectedUser.fullName)
                   }
                   alt="profile pic"
                 />

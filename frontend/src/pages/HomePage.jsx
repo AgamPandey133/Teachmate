@@ -14,7 +14,7 @@ import {
   UsersIcon,
 } from "lucide-react";
 
-import { capitialize } from "../lib/utils";
+import { capitialize, getAvatar } from "../lib/utils";
 
 import FriendCard, { getLanguageFlag } from "../components/FriendCard";
 import NoFriendsFound from "../components/NoFriendsFound";
@@ -123,7 +123,7 @@ const HomePage = () => {
                       <div className="flex items-center gap-4">
                         <div className="avatar">
                            <div className="w-16 rounded-full ring ring-base-300 ring-offset-base-100 ring-offset-2 group-hover:ring-primary/50 transition-all duration-300">
-                             <img src={user.profilePic} alt={user.fullName} />
+                             <img src={getAvatar(user.profilePic, user.fullName)} alt={user.fullName} />
                            </div>
                         </div>
 

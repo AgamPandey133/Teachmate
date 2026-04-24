@@ -3,6 +3,7 @@ import useAuthUser from "../hooks/useAuthUser";
 import { BellIcon, LogOutIcon, ShipWheelIcon, BookOpen, Bot } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
 import useLogout from "../hooks/useLogout";
+import { getAvatar } from "../lib/utils";
 
 const Navbar = () => {
   const { authUser } = useAuthUser();
@@ -60,11 +61,10 @@ const Navbar = () => {
           <Link to="/profile">
             <div className="avatar cursor-pointer">
                 <div className="w-9 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img
-                    src={authUser?.profilePic}
-                    alt="User Avatar"
-                    rel="noreferrer"
-                />
+                  <img
+                    src={getAvatar(authUser?.profilePic, authUser?.fullName)}
+                    alt="User avatar"
+                  />
                 </div>
             </div>
           </Link>

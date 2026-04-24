@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { LANGUAGE_TO_FLAG } from "../constants";
+import { getAvatar } from "../lib/utils";
 
 const FriendCard = ({ friend }) => {
   return (
@@ -8,8 +9,8 @@ const FriendCard = ({ friend }) => {
         {/* USER INFO */}
         <div className="flex items-center gap-4 mb-4">
           <div className="avatar">
-            <div className="w-14 rounded-full ring ring-base-300 ring-offset-base-100 ring-offset-2 group-hover:ring-primary/50 transition-all duration-300">
-              <img src={friend.profilePic} alt={friend.fullName} />
+            <div className="w-16 rounded-full border border-base-300">
+              <img src={getAvatar(friend.profilePic, friend.fullName)} alt={friend.fullName} />
             </div>
           </div>
           <div>

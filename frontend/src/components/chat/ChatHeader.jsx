@@ -2,6 +2,7 @@ import { X, Video } from "lucide-react";
 import { useSocketContext } from "../../context/SocketContext";
 import { useChatStore } from "../../store/useChatStore";
 import LanguageTimer from "./LanguageTimer";
+import { getAvatar } from "../../lib/utils";
 
 const ChatHeader = () => {
   const { selectedUser, setSelectedUser } = useChatStore();
@@ -15,7 +16,7 @@ const ChatHeader = () => {
           <div className="avatar">
             <div className="size-10 rounded-full relative">
               <img
-                src={selectedUser.profilePic || "/avatar.png"}
+                src={getAvatar(selectedUser.profilePic, selectedUser.fullName)}
                 alt={selectedUser.fullName}
               />
             </div>

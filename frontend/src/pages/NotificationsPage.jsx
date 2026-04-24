@@ -8,6 +8,7 @@ import {
   UserCheckIcon,
 } from "lucide-react";
 import NoNotificationsFound from "../components/NoNotificationsFound";
+import { getAvatar } from "../lib/utils";
 
 const NotificationsPage = () => {
   const queryClient = useQueryClient();
@@ -62,7 +63,7 @@ const NotificationsPage = () => {
                           <div className="flex items-center gap-3">
                             <div className="avatar w-14 h-14 rounded-full bg-base-300">
                               <img
-                                src={request.sender.profilePic}
+                                src={getAvatar(request.sender.profilePic, request.sender.fullName)}
                                 alt={request.sender.fullName}
                               />
                             </div>
@@ -114,7 +115,7 @@ const NotificationsPage = () => {
                         <div className="flex items-start gap-3">
                           <div className="avatar mt-1 size-10 rounded-full">
                             <img
-                              src={notification.recipient.profilePic}
+                              src={getAvatar(notification.recipient.profilePic, notification.recipient.fullName)}
                               alt={notification.recipient.fullName}
                             />
                           </div>

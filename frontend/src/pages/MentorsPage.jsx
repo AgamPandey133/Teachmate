@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getMentors, sendFriendRequest } from "../lib/api";
 import { UserPlus, MessageSquare, Star } from "lucide-react";
-import toast from "react-hot-toast";
 import useAuthUser from "../hooks/useAuthUser";
 import { useNavigate } from "react-router";
+import { getAvatar } from "../lib/utils";
 
 const MentorsPage = () => {
     const { authUser } = useAuthUser();
@@ -53,7 +53,7 @@ const MentorsPage = () => {
                         <figure className="px-10 pt-10">
                             <div className="avatar">
                                 <div className="w-24 rounded-full ring ring-base-300 ring-offset-base-100 ring-offset-2 group-hover:ring-primary/50 transition-all duration-300 shadow-lg">
-                                    <img src={mentor.profilePic || "/avatar.png"} alt={mentor.fullName} />
+                                    <img src={getAvatar(mentor.profilePic, mentor.fullName)} alt={mentor.fullName} />
                                 </div>
                             </div>
                         </figure>
