@@ -78,6 +78,18 @@ export async function uploadAudio(audioBlob) {
   return response.data;
 }
 
+export async function uploadImage(imageFile) {
+  const formData = new FormData();
+  formData.append("image", imageFile);
+
+  const response = await axiosInstance.post("/upload/image", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+}
+
 // Vocabulary
 export const addWordToNotebook = async (data) => {
     const response = await axiosInstance.post("/vocabulary", data);

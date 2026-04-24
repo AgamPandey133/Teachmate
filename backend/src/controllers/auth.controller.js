@@ -28,14 +28,14 @@ export async function signup(req, res) {
         .json({ message: "Email already exists, please use a diffrent one" });
     }
 
-    const idx = Math.floor(Math.random() * 100) + 1; // generate a num between 1-100
-    const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`;
+    // Generate initials avatar by default using ui-avatars
+    const initialsAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=random&color=fff&size=200`;
 
     const newUser = await User.create({
       email,
       fullName,
       password,
-      profilePic: randomAvatar,
+      profilePic: initialsAvatar,
       role: req.body.role || "student",
     });
 

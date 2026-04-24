@@ -2,7 +2,7 @@ import { useState } from "react";
 import useAuthUser from "../hooks/useAuthUser";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { completeOnboarding } from "../lib/api";
+import { completeOnboarding, uploadImage } from "../lib/api";
 import {
   CameraIcon,
   LoaderIcon,
@@ -24,6 +24,8 @@ const OnboardingPage = () => {
     location: authUser?.location || "",
     profilePic: authUser?.profilePic || "",
   });
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const { mutate: onboardingMutation, isPending } = useMutation({
     mutationFn: completeOnboarding,
@@ -37,10 +39,38 @@ const OnboardingPage = () => {
     },
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    onboardingMutation(formState);
+    let profilePicUrl = formState.profilePic;
+
+    if (selectedImage) {
+        setIsUploadingImage(true);
+        try {
+            const res = await uploadImage(selectedImage);
+            profilePicUrl = res.imageUrl;
+        } catch (error) {
+            toast.error("Failed to upload image");
+            setIsUploadingImage(false);
+            return;
+        }
+        setIsUploadingImage(false);
+    }
+
+    onboardingMutation({ ...formState, profilePic: profilePicUrl });
+  };
+
+  const handleImageChange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+          setSelectedImage(file);
+          // Create a preview URL
+          const reader = new FileReader();
+          reader.onloadend = () => {
+              setFormState(prev => ({ ...prev, profilePicPreview: reader.result }));
+          };
+          reader.readAsDataURL(file);
+      }
   };
 
   const handleRandomAvatar = () => {
@@ -63,18 +93,34 @@ const OnboardingPage = () => {
             {/* PROFILE PIC CONTAINER */}
             <div className="flex flex-col items-center justify-center space-y-4">
               {/* IMAGE PREVIEW */}
-              <div className="size-32 rounded-full bg-base-300 overflow-hidden">
-                {formState.profilePic ? (
-                  <img
-                    src={formState.profilePic}
-                    alt="Profile Preview"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full">
-                    <CameraIcon className="size-12 text-base-content opacity-40" />
+              <div className="relative">
+                  <div className="size-32 rounded-full bg-base-300 overflow-hidden border-2 border-base-200">
+                    {(formState.profilePicPreview || formState.profilePic) ? (
+                      <img
+                        src={formState.profilePicPreview || formState.profilePic}
+                        alt="Profile Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <CameraIcon className="size-12 text-base-content opacity-40" />
+                      </div>
+                    )}
                   </div>
-                )}
+                  <label 
+                      htmlFor="onboarding-avatar-upload" 
+                      className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full cursor-pointer shadow-md hover:bg-primary/80 transition-colors"
+                  >
+                      <CameraIcon size={18} />
+                      <input 
+                          type="file" 
+                          id="onboarding-avatar-upload" 
+                          className="hidden" 
+                          accept="image/*"
+                          onChange={handleImageChange}
+                          disabled={isUploadingImage}
+                      />
+                  </label>
               </div>
 
               {/* Generate Random Avatar BTN */}
@@ -199,11 +245,11 @@ const OnboardingPage = () => {
             {/* SUBMIT BUTTON */}
 
             <button
-              className="btn btn-primary w-full"
-              disabled={isPending}
+              className="btn btn-primary w-full mt-6"
+              disabled={isPending || isUploadingImage}
               type="submit"
             >
-              {!isPending ? (
+              {!(isPending || isUploadingImage) ? (
                 <>
                   <ShipWheelIcon className="size-5 mr-2" />
                   Complete Onboarding

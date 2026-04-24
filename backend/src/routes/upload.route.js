@@ -29,4 +29,25 @@ router.post('/audio', protectRoute, upload.single('audio'), async (req, res) => 
   }
 });
 
+router.post('/image', protectRoute, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No image file provided" });
+    }
+
+    // Convert buffer to base64 for Cloudinary upload
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    const dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+
+    const uploadResponse = await cloudinary.uploader.upload(dataURI, {
+      folder: "profile_pics",
+    });
+
+    res.status(200).json({ imageUrl: uploadResponse.secure_url });
+  } catch (error) {
+    console.error("Error in image upload:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 export default router;

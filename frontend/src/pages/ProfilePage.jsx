@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateProfile } from "../lib/api";
+import { updateProfile, uploadImage } from "../lib/api";
 import { useChatStore } from "../store/useChatStore";
 import useAuthUser from "../hooks/useAuthUser";
-import { User, Mail, Globe, MapPin, DollarSign, Save } from "lucide-react";
+import { User, Mail, Globe, MapPin, DollarSign, Save, Camera } from "lucide-react";
 import toast from "react-hot-toast";
 
 const ProfilePage = () => {
@@ -16,6 +16,8 @@ const ProfilePage = () => {
         learningLanguage: "",
         location: ""
     });
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
 
     useEffect(() => {
         if (authUser) {
@@ -40,9 +42,39 @@ const ProfilePage = () => {
         }
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        updateProfileMutation(formData);
+        
+        let profilePicUrl = formData.profilePic;
+        
+        if (selectedImage) {
+            setIsUploadingImage(true);
+            try {
+                const res = await uploadImage(selectedImage);
+                profilePicUrl = res.imageUrl;
+            } catch (error) {
+                toast.error("Failed to upload image");
+                setIsUploadingImage(false);
+                return;
+            }
+            setIsUploadingImage(false);
+        }
+
+        updateProfileMutation({ ...formData, profilePic: profilePicUrl });
+        setSelectedImage(null);
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedImage(file);
+            // Create a preview URL
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData(prev => ({ ...prev, profilePicPreview: reader.result }));
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     if (!authUser) return null;
@@ -50,11 +82,27 @@ const ProfilePage = () => {
     return (
         <div className="min-h-screen pt-20 px-4 max-w-2xl mx-auto">
             <div className="bg-base-100 rounded-xl shadow-lg border border-base-300 p-8">
-                <div className="text-center mb-8">
-                    <div className="avatar mb-4">
-                        <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                            <img src={authUser.profilePic || "/avatar.png"} alt="Profile" />
+                <div className="text-center mb-8 flex flex-col items-center">
+                    <div className="relative mb-4">
+                        <div className="avatar">
+                            <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                <img src={formData.profilePicPreview || authUser.profilePic || "/avatar.png"} alt="Profile" />
+                            </div>
                         </div>
+                        <label 
+                            htmlFor="avatar-upload" 
+                            className="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full cursor-pointer shadow-sm hover:bg-primary/80 transition-colors"
+                        >
+                            <Camera size={16} />
+                            <input 
+                                type="file" 
+                                id="avatar-upload" 
+                                className="hidden" 
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                disabled={isUploadingImage}
+                            />
+                        </label>
                     </div>
                     <h1 className="text-2xl font-bold">{authUser.fullName}</h1>
                     <p className="text-sm opacity-70 mb-2">{authUser.email}</p>
@@ -137,8 +185,8 @@ const ProfilePage = () => {
                         )}
                     </div>
 
-                    <button type="submit" className="btn btn-primary w-full mt-6" disabled={isPending}>
-                        {isPending ? <span className="loading loading-spinner"></span> : <><Save size={18} /> Save Changes</>}
+                    <button type="submit" className="btn btn-primary w-full mt-6" disabled={isPending || isUploadingImage}>
+                        {(isPending || isUploadingImage) ? <span className="loading loading-spinner"></span> : <><Save size={18} /> Save Changes</>}
                     </button>
                 </form>
             </div>
