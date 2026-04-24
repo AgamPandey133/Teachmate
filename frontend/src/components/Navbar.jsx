@@ -18,20 +18,20 @@ const Navbar = () => {
   const { logoutMutation } = useLogout();
 
   return (
-    <nav className="bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 flex items-center">
+    <nav className="bg-base-100/80 backdrop-blur-lg border-b border-base-content/10 sticky top-0 z-50 h-16 flex items-center transition-all duration-300 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-end w-full">
-          {/* LOGO - ONLY IN THE CHAT PAGE */}
-          {isChatPage && (
-            <div className="pl-5">
-              <Link to="/" className="flex items-center gap-2.5">
-                <ShipWheelIcon className="size-9 text-primary" />
-                <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary  tracking-wider">
-                  TeachMate{" "}
-                </span>
-              </Link>
-            </div>
-          )}
+        <div className="flex items-center justify-between w-full">
+          {/* LOGO */}
+          <div className="flex items-center gap-2.5">
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <div className="p-2 rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-content transition-all duration-300">
+                <ShipWheelIcon className="size-6" />
+              </div>
+              <span className="text-2xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wide">
+                TeachMate
+              </span>
+            </Link>
+          </div>
 
           <div className="flex items-center gap-3 sm:gap-4 ml-auto">
             <Link to={"/notifications"}>

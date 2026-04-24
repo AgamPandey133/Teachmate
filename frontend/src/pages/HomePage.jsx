@@ -117,21 +117,23 @@ const HomePage = () => {
                 return (
                   <div
                     key={user._id}
-                    className="card bg-base-200 hover:shadow-lg transition-all duration-300"
+                    className="card bg-base-100 border border-base-300 hover:border-primary/50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden group"
                   >
-                    <div className="card-body p-5 space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="avatar size-16 rounded-full">
-                          <img src={user.profilePic} alt={user.fullName} />
+                    <div className="card-body p-6 space-y-5">
+                      <div className="flex items-center gap-4">
+                        <div className="avatar">
+                           <div className="w-16 rounded-full ring ring-base-300 ring-offset-base-100 ring-offset-2 group-hover:ring-primary/50 transition-all duration-300">
+                             <img src={user.profilePic} alt={user.fullName} />
+                           </div>
                         </div>
 
                         <div>
-                          <h3 className="font-semibold text-lg">
+                          <h3 className="font-bold text-xl truncate group-hover:text-primary transition-colors">
                             {user.fullName}
                           </h3>
                           {user.location && (
-                            <div className="flex items-center text-xs opacity-70 mt-1">
-                              <MapPinIcon className="size-3 mr-1" />
+                            <div className="flex items-center text-xs opacity-70 mt-1 font-medium">
+                              <MapPinIcon className="size-3.5 mr-1 text-primary" />
                               {user.location}
                             </div>
                           )}
@@ -139,37 +141,41 @@ const HomePage = () => {
                       </div>
 
                       {/* Languages with flags */}
-                      <div className="flex flex-wrap gap-1.5">
-                        <span className="badge badge-secondary">
-                          {getLanguageFlag(user.nativeLanguage)}
-                          Native: {capitialize(user.nativeLanguage)}
-                        </span>
-                        <span className="badge badge-outline">
-                          {getLanguageFlag(user.learningLanguage)}
-                          Learning: {capitialize(user.learningLanguage)}
-                        </span>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2 bg-base-200 p-2 rounded-lg">
+                           <div className="bg-secondary/10 p-1.5 rounded-md">
+                              {getLanguageFlag(user.nativeLanguage)}
+                           </div>
+                           <span className="text-sm font-medium">Native <span className="opacity-70 font-normal">{capitialize(user.nativeLanguage)}</span></span>
+                        </div>
+                        <div className="flex items-center gap-2 bg-base-200 p-2 rounded-lg">
+                           <div className="bg-primary/10 p-1.5 rounded-md">
+                              {getLanguageFlag(user.learningLanguage)}
+                           </div>
+                           <span className="text-sm font-medium">Learning <span className="opacity-70 font-normal">{capitialize(user.learningLanguage)}</span></span>
+                        </div>
                       </div>
 
                       {user.bio && (
-                        <p className="text-sm opacity-70">{user.bio}</p>
+                        <p className="text-sm opacity-80 leading-relaxed bg-base-200/50 p-3 rounded-xl italic">"{user.bio}"</p>
                       )}
 
                       {/* Action button */}
                       <button
-                        className={`btn w-full mt-2 ${
-                          hasRequestBeenSent ? "btn-disabled" : "btn-primary"
+                        className={`btn w-full mt-auto rounded-xl transition-all duration-300 ${
+                          hasRequestBeenSent ? "btn-disabled" : "btn-primary group-hover:shadow-lg group-hover:shadow-primary/30"
                         } `}
                         onClick={() => sendRequestMutation(user._id)}
                         disabled={hasRequestBeenSent || isPending}
                       >
                         {hasRequestBeenSent ? (
                           <>
-                            <CheckCircleIcon className="size-4 mr-2" />
+                            <CheckCircleIcon className="size-5 mr-2" />
                             Request Sent
                           </>
                         ) : (
                           <>
-                            <UserPlusIcon className="size-4 mr-2" />
+                            <UserPlusIcon className="size-5 mr-2" />
                             Send Friend Request
                           </>
                         )}

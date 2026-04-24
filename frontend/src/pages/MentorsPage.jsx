@@ -49,34 +49,34 @@ const MentorsPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {mentors?.map((mentor) => (
-                    <div key={mentor._id} className="card bg-base-100 shadow-xl border border-base-200">
+                    <div key={mentor._id} className="card bg-base-100 border border-base-300 hover:border-primary/50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden group">
                         <figure className="px-10 pt-10">
                             <div className="avatar">
-                                <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                <div className="w-24 rounded-full ring ring-base-300 ring-offset-base-100 ring-offset-2 group-hover:ring-primary/50 transition-all duration-300 shadow-lg">
                                     <img src={mentor.profilePic || "/avatar.png"} alt={mentor.fullName} />
                                 </div>
                             </div>
                         </figure>
-                        <div className="card-body items-center text-center">
-                            <h2 className="card-title flex items-center gap-2">
+                        <div className="card-body items-center text-center p-6 space-y-3">
+                            <h2 className="card-title flex items-center gap-2 text-2xl font-bold group-hover:text-primary transition-colors">
                                 {mentor.fullName}
-                                <Star className="size-4 text-yellow-500 fill-yellow-500" />
+                                <Star className="size-5 text-yellow-500 fill-yellow-500" />
                             </h2>
-                            <p className="text-sm opacity-70 line-clamp-2">{mentor.bio || "No bio available"}</p>
+                            <p className="text-sm opacity-80 line-clamp-2 italic bg-base-200/50 p-3 rounded-xl w-full">"{mentor.bio || "No bio available"}"</p>
                             
-                            <div className="flex flex-wrap justify-center gap-2 my-2">
-                                {mentor.nativeLanguage && <span className="badge badge-ghost">Speaks: {mentor.nativeLanguage}</span>}
-                                {mentor.learningLanguage && <span className="badge badge-outline">Learning: {mentor.learningLanguage}</span>}
+                            <div className="flex flex-wrap justify-center gap-2 my-2 w-full">
+                                {mentor.nativeLanguage && <span className="badge badge-secondary px-3 py-3 rounded-lg shadow-sm font-medium">Speaks: {mentor.nativeLanguage}</span>}
+                                {mentor.learningLanguage && <span className="badge badge-outline px-3 py-3 rounded-lg shadow-sm font-medium border-base-content/20">Learning: {mentor.learningLanguage}</span>}
                             </div>
 
-                            <div className="stat-value text-primary text-2xl">${mentor.hourlyRate}<span className="text-sm text-base-content/50">/hr</span></div>
+                            <div className="stat-value text-primary text-3xl font-extrabold my-2">${mentor.hourlyRate}<span className="text-sm text-base-content/50 font-medium">/hr</span></div>
 
-                            <div className="card-actions mt-4 w-full">
-                                <button onClick={() => handleConnect(mentor._id)} className="btn btn-outline btn-sm flex-1">
-                                    <UserPlus size={16} /> Connect
+                            <div className="card-actions mt-4 w-full flex gap-3">
+                                <button onClick={() => handleConnect(mentor._id)} className="btn btn-outline flex-1 rounded-xl hover:bg-base-200 hover:border-base-content/20 transition-all">
+                                    <UserPlus size={18} /> Connect
                                 </button>
-                                <button onClick={() => handleBookSession(mentor)} className="btn btn-primary btn-sm flex-1">
-                                    <MessageSquare size={16} /> Book
+                                <button onClick={() => handleBookSession(mentor)} className="btn btn-primary flex-1 rounded-xl shadow-lg hover:shadow-primary/40 transition-all">
+                                    <MessageSquare size={18} /> Book
                                 </button>
                             </div>
                         </div>

@@ -101,20 +101,20 @@ const ChatContainer = () => {
                 {formatMessageTime(message.createdAt)}
               </time>
             </div>
-            <div className="chat-bubble flex flex-col group relative">
+            <div className={`chat-bubble shadow-md flex flex-col group relative transition-all duration-300 ${message.senderId === authUser._id ? "bg-gradient-to-br from-primary to-primary/80 text-primary-content" : "bg-base-200 text-base-content"}`}>
               {message.image && (
                 <img
                   src={message.image}
                   alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
+                  className="sm:max-w-[200px] rounded-xl shadow-sm mb-2"
                 />
               )}
               {message.audioUrl && (
-                <audio controls src={message.audioUrl} className="w-full sm:w-[250px] mb-2" />
+                <audio controls src={message.audioUrl} className="w-full sm:w-[250px] mb-2 rounded-full" />
               )}
               {message.text && (
                   <>
-                    <p>{message.text}</p>
+                    <p className="leading-relaxed">{message.text}</p>
                     {/* Save to Notebook Button - visible on hover or always on mobile? Group-hover for desktop */}
                     <button 
                         onClick={() => handleSaveToNotebook(message.text)}

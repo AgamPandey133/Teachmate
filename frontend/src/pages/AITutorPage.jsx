@@ -63,46 +63,46 @@ const AITutorPage = () => {
     };
 
     return (
-        <div className="h-screen pt-20 px-4 max-w-4xl mx-auto flex flex-col">
-            <div className="bg-base-100 rounded-xl shadow-lg border border-base-300 flex-1 flex flex-col overflow-hidden mb-4">
+        <div className="h-[calc(100vh-4rem)] pt-6 pb-6 px-4 max-w-4xl mx-auto flex flex-col">
+            <div className="bg-base-100/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-base-content/10 flex-1 flex flex-col overflow-hidden">
                 {/* Header */}
-                <div className="p-4 border-b border-base-300 bg-base-200 flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-full">
-                        <Bot className="size-6 text-primary" />
+                <div className="p-5 border-b border-base-content/10 bg-base-200/50 flex items-center gap-4">
+                    <div className="p-3 bg-primary/20 rounded-2xl ring-4 ring-primary/10">
+                        <Bot className="size-7 text-primary animate-pulse" />
                     </div>
                     <div>
-                        <h2 className="font-bold text-lg">TeachMate AI Tutor</h2>
-                        <p className="text-xs text-base-content/70">Powered by Gemini Pro</p>
+                        <h2 className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">TeachMate AI Tutor</h2>
+                        <p className="text-sm text-base-content/70 font-medium">Powered by Gemini RAG</p>
                     </div>
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-base-100/50">
                     {messages.map((msg) => (
-                        <div key={msg._id} className={`chat ${msg.sender === "user" ? "chat-end" : "chat-start"}`}>
+                        <div key={msg._id} className={`chat ${msg.sender === "user" ? "chat-end" : "chat-start"} group`}>
                              <div className="chat-image avatar">
-                                <div className="size-10 rounded-full border flex items-center justify-center bg-base-300">
-                                   {msg.sender === "ai" ? <Bot size={20} /> : <User size={20} />}
+                                <div className={`size-10 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${msg.sender === "ai" ? "border-primary/30 bg-primary/10 group-hover:border-primary" : "border-base-300 bg-base-200"}`}>
+                                   {msg.sender === "ai" ? <Bot size={20} className="text-primary" /> : <User size={20} />}
                                 </div>
                             </div>
-                            <div className="chat-header mb-1 opacity-50 text-xs">
+                            <div className="chat-header mb-1 opacity-50 text-xs font-medium pl-1">
                                 {msg.sender === "ai" ? "AI Tutor" : "You"}
-                                <time className="ml-2">{formatMessageTime(msg.createdAt)}</time>
+                                <time className="ml-2 opacity-70">{formatMessageTime(msg.createdAt)}</time>
                             </div>
-                            <div className={`chat-bubble ${msg.sender === "ai" ? "chat-bubble-primary" : ""}`}>
-                                <p className="whitespace-pre-wrap">{msg.text}</p>
+                            <div className={`chat-bubble shadow-sm ${msg.sender === "ai" ? "bg-gradient-to-br from-primary to-secondary text-primary-content" : "bg-base-200 text-base-content"}`}>
+                                <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
                             </div>
                         </div>
                     ))}
                     {isLoading && (
                         <div className="chat chat-start">
                              <div className="chat-image avatar">
-                                <div className="size-10 rounded-full border flex items-center justify-center bg-base-300">
-                                   <Bot size={20} />
+                                <div className="size-10 rounded-full border-2 border-primary/30 bg-primary/10 flex items-center justify-center">
+                                   <Bot size={20} className="text-primary" />
                                 </div>
                             </div>
-                            <div className="chat-bubble chat-bubble-primary">
-                                <Loader2 className="animate-spin size-5" />
+                            <div className="chat-bubble bg-base-200">
+                                <Loader2 className="animate-spin size-5 text-primary" />
                             </div>
                         </div>
                     )}
@@ -110,17 +110,17 @@ const AITutorPage = () => {
                 </div>
 
                 {/* Input */}
-                <form onSubmit={handleSend} className="p-4 border-t border-base-300 bg-base-100">
-                    <div className="flex gap-2">
+                <form onSubmit={handleSend} className="p-4 border-t border-base-content/10 bg-base-200/50">
+                    <div className="flex gap-3 bg-base-100 p-2 rounded-full border border-base-content/10 shadow-inner focus-within:ring-2 focus-within:ring-primary/30 transition-all">
                         <input
                             type="text"
-                            className="input input-bordered flex-1"
-                            placeholder="Ask me to explain a concept..."
+                            className="input bg-transparent border-none flex-1 focus:outline-none w-full px-4"
+                            placeholder="Ask me to explain a concept or translate a phrase..."
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             disabled={isLoading}
                         />
-                        <button type="submit" className="btn btn-primary btn-circle" disabled={isLoading || !input.trim()}>
+                        <button type="submit" className="btn btn-primary btn-circle shadow-lg hover:shadow-primary/50 transition-all" disabled={isLoading || !input.trim()}>
                             <Send size={20} />
                         </button>
                     </div>

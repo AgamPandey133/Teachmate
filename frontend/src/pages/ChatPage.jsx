@@ -30,10 +30,10 @@ const ChatPage = () => {
   }, [id, users, setSelectedUser]);
 
   return (
-    <div className="h-screen bg-base-200">
-      <div className="flex items-center justify-center pt-20 px-4">
-        <div className="bg-base-100 rounded-lg shadow-cl w-full max-w-6xl h-[calc(100vh-8rem)]">
-          <div className="flex h-full rounded-lg overflow-hidden">
+    <div className="h-[calc(100vh-4rem)] bg-base-200/30">
+      <div className="flex items-center justify-center pt-6 px-4 h-full pb-6">
+        <div className="bg-base-100/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-base-content/10 w-full max-w-6xl h-full overflow-hidden">
+          <div className="flex h-full">
             <ChatSidebar />
             {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
           </div>
