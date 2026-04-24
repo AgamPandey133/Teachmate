@@ -15,14 +15,9 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (authUser) {
-      // const socket = io("/", {
-      //   query: {
-      //     userId: authUser._id,
-      //   },
-      // });
-      const socket = io(import.meta.env.MODE === "development" ? "/" : "https://teachmatebackend.duckdns.org", {
-    query: { userId: authUser._id }
-});
+      const socket = io("/", {
+        query: { userId: authUser._id }
+      });
 
       setSocket(socket);
 
