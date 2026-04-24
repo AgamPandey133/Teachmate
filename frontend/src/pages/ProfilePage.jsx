@@ -38,7 +38,8 @@ const ProfilePage = () => {
              toast.success("Profile updated successfully");
         },
         onError: (error) => {
-            toast.error(error.response?.data?.message || "Failed to update profile");
+            console.error("Profile update failed:", error);
+            toast.error(error.response?.data?.message || error.message || "Failed to update profile");
         }
     });
 
@@ -60,7 +61,9 @@ const ProfilePage = () => {
             setIsUploadingImage(false);
         }
 
-        updateProfileMutation({ ...formData, profilePic: profilePicUrl });
+        // Remove the massive base64 preview string before sending to backend
+        const { profilePicPreview, ...payload } = formData;
+        updateProfileMutation({ ...payload, profilePic: profilePicUrl });
         setSelectedImage(null);
     };
 

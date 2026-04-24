@@ -57,7 +57,9 @@ const OnboardingPage = () => {
         setIsUploadingImage(false);
     }
 
-    onboardingMutation({ ...formState, profilePic: profilePicUrl });
+    // Remove the massive base64 preview string before sending to backend
+    const { profilePicPreview, ...payload } = formState;
+    onboardingMutation({ ...payload, profilePic: profilePicUrl });
   };
 
   const handleImageChange = (e) => {
