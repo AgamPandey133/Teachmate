@@ -167,11 +167,11 @@ export async function getOutgoingFriendReqs(req, res) {
 export async function updateProfile(req, res) {
   try {
     const userId = req.user.id;
-    const { bio, hourlyRate, nativeLanguage, learningLanguage, location } = req.body;
+    const { bio, hourlyRate, nativeLanguage, learningLanguage, location, profilePic } = req.body;
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { bio, hourlyRate, nativeLanguage, learningLanguage, location },
+      { bio, hourlyRate, nativeLanguage, learningLanguage, location, profilePic },
       { new: true }
     );
 
