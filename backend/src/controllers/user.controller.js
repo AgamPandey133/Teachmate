@@ -11,6 +11,7 @@ export async function getRecommendedUsers(req, res) {
         { _id: { $ne: currentUserId } }, //exclude current user
         { _id: { $nin: currentUser.friends } }, // exclude current user's friends
         { isOnboarded: true },
+        { role: { $ne: "mentor" } }, // exclude mentors from new learners
       ],
     });
     res.status(200).json(recommendedUsers);
