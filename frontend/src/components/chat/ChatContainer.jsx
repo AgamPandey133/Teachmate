@@ -115,7 +115,7 @@ const ChatContainer = () => {
                     {/* Save to Notebook Button - visible on hover or always on mobile? Group-hover for desktop */}
                     <button 
                         onClick={() => handleSaveToNotebook(message.text)}
-                        className="absolute -right-8 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-2 text-zinc-400 hover:text-emerald-500"
+                        className={`absolute ${message.senderId === authUser._id ? "-left-10" : "-right-10"} top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-2 text-zinc-400 hover:text-emerald-500`}
                         title="Save to Notebook"
                     >
                         <BookMarked size={16} />

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getMyVocabulary, deleteVocabularyWord } from "../lib/api";
-import { Trash, BookOpen } from "lucide-react";
+import { getMyVocabulary, deleteVocabularyWord, addWordToNotebook } from "../lib/api";
+import { Trash, BookOpen, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 
 const VocabularyPage = () => {
@@ -33,18 +33,40 @@ const VocabularyPage = () => {
         }
     };
 
+    const handleAddWord = async () => {
+        const word = prompt("Enter the word or phrase to save:");
+        if (!word) return;
+        const translation = prompt("Enter translation (optional):");
+        const originalContext = prompt("Enter original context (optional):");
+
+        try {
+            await addWordToNotebook({ word, translation, originalContext });
+            loadVocabulary();
+            toast.success("Word added to Notebook!");
+        } catch (err) {
+            toast.error("Failed to add word");
+            console.error(err);
+        }
+    };
+
     if (isLoading) return <div className="p-8 text-center text-zinc-500">Loading your notebook...</div>;
 
     return (
         <div className="min-h-screen pt-20 px-4 max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 mb-8">
-                <div className="p-3 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
-                     <BookOpen className="size-8 text-emerald-600 dark:text-emerald-400" />
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+                <div className="flex items-center gap-4">
+                    <div className="p-3 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
+                         <BookOpen className="size-8 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                    <div>
+                       <h1 className="text-3xl font-bold">My Vocabulary Notebook</h1>
+                       <p className="text-zinc-500">Words and phrases you saved from your conversations</p>
+                    </div>
                 </div>
-                <div>
-                   <h1 className="text-3xl font-bold">My Vocabulary Notebook</h1>
-                   <p className="text-zinc-500">Words and phrases you saved from your conversations</p>
-                </div>
+                <button onClick={handleAddWord} className="btn btn-primary">
+                    <Plus className="size-5 mr-2" />
+                    Add Word
+                </button>
             </div>
 
             {words.length === 0 ? (
