@@ -25,6 +25,7 @@ const CallPage = () => {
   const userVideo = useRef();
   const connectionRef = useRef();
   const screenTrackRef = useRef();
+  const localStreamRef = useRef(null);
 
   // Check if we are answering a call (data passed from notification)
   const incomingCallData = location.state?.callData;
@@ -43,6 +44,7 @@ const CallPage = () => {
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         setStream(currentStream);
+        localStreamRef.current = currentStream;
         if (myVideo.current) {
           myVideo.current.srcObject = currentStream;
         }
@@ -72,15 +74,24 @@ const CallPage = () => {
       
     socket.on("callEnded", () => {
         toast("The other person ended the call.");
-        navigate("/");
+        if (localStreamRef.current) {
+            localStreamRef.current.getTracks().forEach(track => track.stop());
+        }
+        if (incomingCallData) {
+            navigate("/");
+        } else {
+            window.close();
+            setTimeout(() => navigate("/"), 500);
+        }
     });
 
     // Cleanup on unmount
     return () => {
         socket.off("callEnded");
         if(connectionRef.current) connectionRef.current.destroy();
-        // stop tracks
+        // stop tracks using both state and ref to ensure it works even if closure is stale
         if(stream) stream.getTracks().forEach(track => track.stop());
+        if(localStreamRef.current) localStreamRef.current.getTracks().forEach(track => track.stop());
     } 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, navigate]); // Re-run when socket is ready
@@ -183,11 +194,22 @@ const CallPage = () => {
     if (connectionRef.current) {
       connectionRef.current.destroy();
     }
-    // Stop local stream
+    // Stop local streams
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
     }
-    navigate("/");
+    if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach(track => track.stop());
+    }
+    
+    // If we initiated the call (new tab), close it. If we received it (same tab), navigate home.
+    if (incomingCallData) {
+        navigate("/");
+    } else {
+        window.close();
+        // Fallback just in case window.close is blocked by browser policies
+        setTimeout(() => navigate("/"), 500);
+    }
   };
   
     const toggleMic = () => {
