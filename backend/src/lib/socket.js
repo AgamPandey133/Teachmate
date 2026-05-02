@@ -66,6 +66,11 @@ io.on("connection", (socket) => {
     io.to(data.to).emit("callAccepted", data.signal);
   });
 
+  socket.on("endCall", (data) => {
+    console.log(`[Signaling] endCall from ${socket.id} to ${data.to}`);
+    io.to(data.to).emit("callEnded");
+  });
+
   // Language Timer Events
   socket.on("timer-start", (data) => {
     // Broadcast to the user they are chatting with

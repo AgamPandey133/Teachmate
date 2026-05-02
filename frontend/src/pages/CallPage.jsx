@@ -70,14 +70,20 @@ const CallPage = () => {
         toast.error("Failed to access camera: " + err.message);
       });
       
+    socket.on("callEnded", () => {
+        toast("The other person ended the call.");
+        navigate("/");
+    });
+
     // Cleanup on unmount
     return () => {
+        socket.off("callEnded");
         if(connectionRef.current) connectionRef.current.destroy();
         // stop tracks
         if(stream) stream.getTracks().forEach(track => track.stop());
     } 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket]); // Re-run when socket is ready
+  }, [socket, navigate]); // Re-run when socket is ready
 
   const callUser = (currentStream) => {
     console.log("Initiating call...");
@@ -167,6 +173,13 @@ const CallPage = () => {
 
   const leaveCall = () => {
     setCallEnded(true);
+    
+    // Notify the other user
+    const otherUserId = incomingCallData ? incomingCallData.from : targetUserId;
+    if (otherUserId) {
+        socket.emit("endCall", { to: otherUserId });
+    }
+
     if (connectionRef.current) {
       connectionRef.current.destroy();
     }
@@ -250,42 +263,71 @@ const CallPage = () => {
 
   return (
     <div className="h-screen bg-neutral flex flex-col items-center justify-center p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-6xl">
-        {/* MY VIDEO */}
-        <div className="relative bg-black rounded-xl overflow-hidden aspect-video shadow-lg">
+      {/* MAIN VIDEO CONTAINER (Picture-in-Picture Layout) */}
+      <div className="relative w-full max-w-6xl aspect-video bg-black rounded-xl overflow-hidden shadow-2xl">
+        
+        {/* MAIN BACKGROUND VIDEO */}
+        {isScreenSharing ? (
+          // If I am sharing screen, my screen is the main background
           <video
             playsInline
             muted
             ref={myVideo}
             autoPlay
-            className={`w-full h-full object-cover ${!isScreenSharing ? "transform scale-x-[-1]" : ""}`}
+            className="w-full h-full object-cover"
           />
-          <div className="absolute bottom-4 left-4 text-white bg-black/50 px-3 py-1 rounded-full">
-            You {isScreenSharing && "(Sharing Screen)"}
-          </div>
+        ) : (
+          // Otherwise, the remote user is the main background
+          <>
+            {callAccepted && !callEnded ? (
+              <video
+                playsInline
+                ref={userVideo}
+                autoPlay
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="flex w-full h-full items-center justify-center text-white text-xl font-medium tracking-wide">
+                {incomingCallData ? "Connecting..." : "Calling..."}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* PIP FLOATING VIDEO */}
+        <div className="absolute bottom-6 right-6 w-32 sm:w-48 md:w-64 aspect-video bg-base-300 rounded-xl overflow-hidden shadow-2xl border-2 border-primary/50 z-10 transition-all duration-300">
+          {isScreenSharing ? (
+            // If I am sharing screen, remote user is PIP
+             callAccepted && !callEnded ? (
+                <video
+                  playsInline
+                  ref={userVideo}
+                  autoPlay
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="flex w-full h-full items-center justify-center text-xs text-white">
+                  Waiting...
+                </div>
+              )
+          ) : (
+            // If I am not sharing screen, my camera is PIP
+            <video
+              playsInline
+              muted
+              ref={myVideo}
+              autoPlay
+              className="w-full h-full object-cover transform scale-x-[-1]"
+            />
+          )}
         </div>
 
-        {/* USER VIDEO */}
-        <div className="relative bg-black rounded-xl overflow-hidden aspect-video shadow-lg flex items-center justify-center">
-            {callAccepted && !callEnded ? (
-                 <video
-                 playsInline
-                 ref={userVideo}
-                 autoPlay
-                 className="w-full h-full object-cover"
-               />
-            ) : (
-                <div className="text-white text-lg">
-                     {incomingCallData ? "Connecting..." : "Calling..."}
-                </div>
-            )}
-            
-             {callAccepted && !callEnded && (
-                <div className="absolute bottom-4 left-4 text-white bg-black/50 px-3 py-1 rounded-full">
-                    {incomingCallData ? incomingCallData.name : "Remote User"}
-                </div>
-             )}
-        </div>
+        {/* LABELS */}
+        {callAccepted && !callEnded && (
+          <div className="absolute top-4 left-4 text-white bg-black/60 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-medium">
+             {isScreenSharing ? "You (Sharing Screen)" : (incomingCallData ? incomingCallData.name : "Remote User")}
+          </div>
+        )}
       </div>
 
       {/* CONTROLS */}
