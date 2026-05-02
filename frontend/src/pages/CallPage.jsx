@@ -284,9 +284,9 @@ const CallPage = () => {
     };
 
   return (
-    <div className="h-screen w-full bg-neutral flex flex-col p-0 sm:p-4">
+    <div className="h-[100dvh] w-full bg-zinc-950 flex flex-col pb-4">
       {/* MAIN VIDEO CONTAINER */}
-      <div className="relative w-full flex-1 bg-black sm:rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
+      <div className="relative w-full flex-1 overflow-hidden flex items-center justify-center bg-black">
         
         {/* MAIN BACKGROUND VIDEO */}
         {isScreenSharing ? (
@@ -296,7 +296,7 @@ const CallPage = () => {
             muted
             ref={myVideo}
             autoPlay
-            className="w-full h-full object-contain bg-zinc-900"
+            className="w-full h-full object-contain"
           />
         ) : (
           // Otherwise, the remote user is the main background
@@ -306,10 +306,10 @@ const CallPage = () => {
                 playsInline
                 ref={userVideo}
                 autoPlay
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             ) : (
-              <div className="flex w-full h-full items-center justify-center text-white text-2xl font-medium tracking-wide bg-zinc-900">
+              <div className="flex w-full h-full items-center justify-center text-white text-2xl font-medium tracking-wide">
                 {incomingCallData ? "Connecting..." : "Calling..."}
               </div>
             )}
@@ -317,7 +317,7 @@ const CallPage = () => {
         )}
 
         {/* PIP FLOATING VIDEO (Remote user when I'm sharing, or My Camera when I'm not) */}
-        <div className="absolute bottom-6 right-6 w-32 sm:w-48 md:w-64 aspect-video bg-base-300 rounded-xl overflow-hidden shadow-2xl border-2 border-primary/50 z-10 transition-all duration-300">
+        <div className="absolute bottom-6 right-6 w-32 sm:w-48 md:w-64 aspect-video bg-zinc-900 rounded-xl overflow-hidden shadow-2xl border border-white/10 z-10 transition-all duration-300">
           {isScreenSharing ? (
             // If I am sharing screen, remote user is PIP
              callAccepted && !callEnded ? (
@@ -346,7 +346,7 @@ const CallPage = () => {
 
         {/* EXTRA PIP FOR LOCAL CAMERA WHEN SCREEN SHARING */}
         {isScreenSharing && stream && (
-          <div className="absolute bottom-6 right-40 sm:right-60 md:right-[18rem] w-24 sm:w-32 md:w-48 aspect-video bg-base-300 rounded-xl overflow-hidden shadow-2xl border-2 border-accent/50 z-10 transition-all duration-300">
+          <div className="absolute bottom-6 right-40 sm:right-60 md:right-[18rem] w-24 sm:w-32 md:w-48 aspect-video bg-zinc-900 rounded-xl overflow-hidden shadow-2xl border border-white/10 z-10 transition-all duration-300">
              <video 
                 playsInline 
                 muted 
@@ -367,37 +367,38 @@ const CallPage = () => {
       </div>
 
       {/* CONTROLS */}
-      <div className="flex items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-6 bg-base-100/50 sm:bg-base-100 p-4 sm:rounded-full shadow-xl mx-auto backdrop-blur-md">
+      <div className="flex items-center justify-center gap-3 sm:gap-4 mt-4 px-4 mx-auto w-full max-w-sm">
         <button
             onClick={toggleMic}
-            className={`btn btn-circle btn-lg ${micEnabled ? "btn-ghost" : "btn-error"}`}
+            className={`btn btn-circle ${micEnabled ? "btn-neutral" : "btn-error text-white"}`}
             title="Toggle Mic"
         >
-           {micEnabled ? <Mic /> : <MicOff />}
+           {micEnabled ? <Mic size={20} /> : <MicOff size={20} />}
         </button>
 
          <button
             onClick={toggleVideo}
-            className={`btn btn-circle btn-lg ${videoEnabled ? "btn-ghost" : "btn-error"}`}
+            className={`btn btn-circle ${videoEnabled ? "btn-neutral" : "btn-error text-white"}`}
              title="Toggle Camera"
         >
-             {videoEnabled ? <Video /> : <VideoOff />}
+             {videoEnabled ? <Video size={20} /> : <VideoOff size={20} />}
         </button>
 
          <button
             onClick={toggleScreenShare}
-            className={`btn btn-circle btn-lg ${isScreenSharing ? "btn-info" : "btn-ghost"}`}
+            className={`btn btn-circle ${isScreenSharing ? "btn-info text-white" : "btn-neutral"}`}
              title="Share Screen"
         >
-             {isScreenSharing ? <MonitorOff /> : <Monitor /> }
+             {isScreenSharing ? <MonitorOff size={20} /> : <Monitor size={20} /> }
         </button>
 
         <button
           onClick={leaveCall}
-          className="btn btn-circle btn-lg btn-error text-white"
+          className="btn btn-error text-white px-6 rounded-full font-medium ml-2 shadow-lg hover:shadow-error/30"
            title="End Call"
         >
-          <PhoneOff size={32} />
+          <PhoneOff size={20} className="mr-2" />
+          End
         </button>
       </div>
     </div>
