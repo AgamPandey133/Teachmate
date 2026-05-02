@@ -41,39 +41,39 @@ const CallNotification = () => {
   if (!call?.isReceivingCall) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center animate-in fade-in duration-200">
-      <div className="bg-base-100 p-8 rounded-2xl shadow-2xl border border-base-300 w-full max-w-sm flex flex-col items-center text-center animate-in zoom-in-95 duration-300">
-        
-        {/* Pulsing Avatar Container */}
-        <div className="relative mb-6">
+    <div className="fixed top-20 right-4 sm:right-8 z-[100] bg-base-100 p-5 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-base-300 w-80 animate-in slide-in-from-right-8 duration-300">
+      <div className="flex items-center gap-4 mb-4">
+        {/* Pulsing Avatar */}
+        <div className="relative">
           <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping"></div>
-          <div className="absolute inset-0 bg-primary/40 rounded-full animate-pulse scale-110"></div>
-          <div className="avatar placeholder relative z-10 ring-4 ring-base-100 rounded-full shadow-lg">
-            <div className="bg-primary text-primary-content rounded-full w-24 h-24 flex items-center justify-center text-3xl font-bold">
+          <div className="avatar placeholder relative z-10">
+            <div className="bg-primary text-primary-content rounded-full w-14 h-14 flex items-center justify-center text-xl font-bold">
               <span>{call.name.charAt(0)}</span>
             </div>
           </div>
         </div>
-
-        <h3 className="font-bold text-2xl mb-1">{call.name}</h3>
-        <p className="text-zinc-500 mb-8 font-medium tracking-wide">Incoming Video Call...</p>
-
-        <div className="flex gap-4 w-full">
-          <button
-            onClick={rejectCall}
-            className="btn btn-error btn-lg flex-1 text-white gap-2 rounded-xl shadow-lg shadow-error/20 hover:scale-105 transition-transform"
-          >
-            <PhoneOff size={20} />
-            Decline
-          </button>
-          <button
-            onClick={answerCall}
-            className="btn btn-success btn-lg flex-1 text-white gap-2 rounded-xl shadow-lg shadow-success/20 hover:scale-105 transition-transform animate-bounce"
-          >
-            <Phone size={20} className="animate-pulse" />
-            Answer
-          </button>
+        
+        <div>
+          <h3 className="font-bold text-lg leading-tight">{call.name}</h3>
+          <p className="text-sm text-zinc-500 font-medium">Incoming Video Call...</p>
         </div>
+      </div>
+      
+      <div className="flex gap-3 mt-2">
+        <button
+          onClick={rejectCall}
+          className="btn btn-error btn-sm flex-1 text-white gap-1 rounded-xl shadow-sm hover:scale-105 transition-transform"
+        >
+          <PhoneOff size={16} />
+          Decline
+        </button>
+        <button
+          onClick={answerCall}
+          className="btn btn-success btn-sm flex-1 text-white gap-1 rounded-xl shadow-sm hover:scale-105 transition-transform animate-bounce"
+        >
+          <Phone size={16} />
+          Answer
+        </button>
       </div>
     </div>
   );
