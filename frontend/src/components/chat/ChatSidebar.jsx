@@ -63,12 +63,14 @@ export const ChatSidebar = () => {
               }
             `}
           >
-            <div className="relative mx-auto lg:mx-0">
-              <AvatarImage profilePic={user.profilePic} fullName={user.fullName} />
+            <div className="relative mx-auto lg:mx-0 shrink-0">
+              <div className="size-12 rounded-full overflow-hidden">
+                <AvatarImage profilePic={user.profilePic} fullName={user.fullName} />
+              </div>
               {onlineUsers.includes(user._id) && (
                 <span
                   className="absolute bottom-0 right-0 size-3 bg-green-500 
-                  rounded-full ring-2 ring-zinc-900"
+                  rounded-full ring-2 ring-zinc-900 z-10"
                 />
               )}
             </div>
